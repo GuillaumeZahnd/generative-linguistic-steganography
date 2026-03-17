@@ -14,8 +14,8 @@ def stegano_encoding(
         payload_bit: Bit to encode (either 0 or 1).
 
     Returns:
-        selected_token: vocabulary index of selected token
-        selected_idx: index in top_k list (for decoding)
+        Vocabulary index of selected token.
+        Index in of the selected token in the top_k shortlist.
     """
     # Remove batch dimension if present
     if top_probabilities.dim() > 1:
@@ -49,14 +49,14 @@ def stegano_encoding(
     if len(valid_indices) == 0:
         # Fallback: pick token whose START is closest to midpoint
         dists = torch.abs(starts - 0.5)
-        idx = torch.argmin(dists).item()
+        selected_index = torch.argmin(dists).item()
     else:
         # Pick first valid token (closest to midpoint boundary)
-        idx = valid_indices[0].item()
+        selected_index = valid_indices[0].item()
 
-    selected_token = top_indices[idx].item()
+    selected_token = top_indices[selected_index].item()
 
-    return selected_token, idx
+    return selected_token, selected_index
 
 
 def stegano_decoding(
@@ -73,7 +73,7 @@ def stegano_decoding(
         token_vocabulary_index: Actual vocabulary index of the token that was selected by the encoder.
 
     Returns:
-        payload_bit: 0 or 1
+        Payload bit (0 or 1).
 
     Raises:
         ValueError: If token_vocabulary_index is not in found among top_indices.
