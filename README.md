@@ -2,7 +2,7 @@
 
 ## Example:
 
-sh```
+```sh
 Running on: cuda
 
 ================================================================
@@ -38,7 +38,7 @@ Decoded bits: [0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1,
 Encoded message: sk-9f3Kx7LmQ2vB8pR4tY6wZ1aC0dE5hJ8nU3iX
 Decoded message: 'sk-9f3Kx7LmQ2vB8pR4tY6wZ1aC0dE5hJ8nU3iX'
 ✓ Perfect message match!
-``
+```
 
 ## Installation & Setup
 
