@@ -17,7 +17,7 @@ def get_top_probabilities(
 
     Returns:
         Re-normalized top-k probabilities, of size (batch_size, top_k).
-        Original vocabulary indices of the corresponding tokens, of size (batch_size, , top_k).
+        Original vocabulary indices of the corresponding tokens, of size (batch_size, top_k).
     """
 
     if logits.dim() > 1:
@@ -34,14 +34,12 @@ def get_top_probabilities(
     logits = logits / temperature
 
     # Top-k filtering
-    top_logits, top_indices = torch.topk(logits, top_k)
-
-    # Tie-breaker: Sort the indices to ensure deterministic order if two logits are identical
-    sorted_positions = torch.argsort(top_indices)
-    top_logits = top_logits[sorted_positions]
-    top_indices = top_indices[sorted_positions]
+    top_logits, top_indices = torch.topk(logits, top_k, dim=-1)
 
     # Compute probabilities
     top_probabilities = F.softmax(top_logits, dim=-1)
+    
+    # Ensure sum is exactly 1.0
+    top_probabilities = top_probabilities / top_probabilities.sum(dim=-1, keepdim=True)    
 
     return top_probabilities.unsqueeze(0), top_indices.unsqueeze(0)
